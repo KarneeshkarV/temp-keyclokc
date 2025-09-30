@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Error Redirect</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .test-section { background: #f8f9fa; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .button { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin: 5px; }
+        .button:hover { background: #0056b3; }
+        .warning { background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        code { background: #e9ecef; padding: 2px 6px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Keycloak Error Redirect Tester</h1>
+    
+    <div class="warning">
+        <strong>⚠️ Important:</strong> Replace <code>YOUR_KEYCLOAK_LOGIN_URL</code> below with your actual Keycloak login URL.
+    </div>
+
+    <div class="test-section">
+        <h2>1. Test URL-Based Errors</h2>
+        <p>Click these links to test different error scenarios:</p>
+        
+        <a href="http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=account&redirect_uri=http://localhost:8080/realms/master/account&response_type=code&error=cancelledOnApp" class="button">
+            Test cancelledOnApp
+        </a>
+        
+        <a href="http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=account&redirect_uri=http://localhost:8080/realms/master/account&response_type=code&error=access_denied" class="button">
+            Test access_denied
+        </a>
+        
+        <a href="http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=account&redirect_uri=http://localhost:8080/realms/master/account&response_type=code&error=invalid_request" class="button">
+            Test invalid_request
+        </a>
+        
+        <a href="http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=account&redirect_uri=http://localhost:8080/realms/master/account&response_type=code&error=server_error" class="button">
+            Test server_error
+        </a>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Manual URL Testing</h2>
+        <p>Copy and paste this URL template, replacing the placeholder:</p>
+        <code>http://localhost:8080/realms/master/protocol/openid-connect/auth?error=cancelledOnApp&error_description=User%20cancelled%20authentication</code>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Debug Console Testing</h2>
+        <p>With debug mode enabled, open browser console (F12) and look for:</p>
+        <ul>
+            <li><code>[ErrorRedirect] URL-based error detected: cancelledOnApp</code></li>
+            <li><code>[ErrorRedirect] Redirecting to: https://app.valura.co.in/auth?...</code></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Expected Redirect</h2>
+        <p>When errors are detected, you should be redirected to:</p>
+        <code>https://app.valura.co.in/auth?error_code=CANCELLED_ON_APP&error_message=Authentication%20was%20cancelled%20in%20the%20mobile%20app&...</code>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Real Error Testing</h2>
+        <ol>
+            <li>Go to your normal Keycloak login page</li>
+            <li>Enter wrong username/password</li>
+            <li>Submit form</li>
+            <li>Should redirect when error appears</li>
+        </ol>
+    </div>
+
+    <script>
+        // Auto-replace placeholder if current domain looks like Keycloak
+        if (window.location.hostname.includes('keycloak') || window.location.pathname.includes('auth')) {
+            const loginUrl = window.location.origin + '/realms/YOUR_REALM/protocol/openid-connect/auth';
+            document.body.innerHTML = document.body.innerHTML.replace(/YOUR_KEYCLOAK_LOGIN_URL/g, loginUrl);
+        }
+    </script>
+</body>
+</html>

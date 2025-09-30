@@ -1,0 +1,26 @@
+[
+  {
+    "session_id": "f987af71-826e-41b2-809f-7afdf27f7627",
+    "transcript_path": "/home/karneeshkar/.claude/projects/-home-karneeshkar-Desktop-projects-OnlyForTestingRandomDumpShit-kdyclock-keycloak-custom-theme/f987af71-826e-41b2-809f-7afdf27f7627.jsonl",
+    "cwd": "/home/karneeshkar/Desktop/projects/OnlyForTestingRandomDumpShit/kdyclock/keycloak-custom-theme",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "UserPromptSubmit",
+    "prompt": "how to test it out ?"
+  },
+  {
+    "session_id": "f987af71-826e-41b2-809f-7afdf27f7627",
+    "transcript_path": "/home/karneeshkar/.claude/projects/-home-karneeshkar-Desktop-projects-OnlyForTestingRandomDumpShit-kdyclock-keycloak-custom-theme/f987af71-826e-41b2-809f-7afdf27f7627.jsonl",
+    "cwd": "/home/karneeshkar/Desktop/projects/OnlyForTestingRandomDumpShit/kdyclock/keycloak-custom-theme",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "UserPromptSubmit",
+    "prompt": "it is runniong o locla host so give me command for that"
+  },
+  {
+    "session_id": "f987af71-826e-41b2-809f-7afdf27f7627",
+    "transcript_path": "/home/karneeshkar/.claude/projects/-home-karneeshkar-Desktop-projects-OnlyForTestingRandomDumpShit-kdyclock-keycloak-custom-theme/f987af71-826e-41b2-809f-7afdf27f7627.jsonl",
+    "cwd": "/home/karneeshkar/Desktop/projects/OnlyForTestingRandomDumpShit/kdyclock/keycloak-custom-theme",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "UserPromptSubmit",
+    "prompt": "errorRedirect.js:240 Uncaught SyntaxError: Unexpected token 'export'\nauth?error=cancelledOnApp:1  Failed to load resource: the server responded with a status of 400 (Bad Request) , http://localhost:8080/realms/master/protocol/openid-connect/auth?error=cancelledOnApp"
+  }
+]

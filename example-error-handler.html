@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Handler - Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .error-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .error-header {
+            color: #d73527;
+            border-bottom: 2px solid #d73527;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .error-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .param-table th,
+        .param-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .param-table th {
+            background-color: #f2f2f2;
+        }
+        .back-button {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background: #0056b3;
+        }
+        .code {
+            background: #e9ecef;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-header">🚨 Authentication Error Detected</h1>
+        
+        <div class="error-details">
+            <h3>Error Details:</h3>
+            <p><strong>Error Code:</strong> <span class="code" id="error-code">N/A</span></p>
+            <p><strong>Error Message:</strong> <span id="error-message">N/A</span></p>
+            <p><strong>Timestamp:</strong> <span id="timestamp">N/A</span></p>
+            <p><strong>Source:</strong> <span id="source">N/A</span></p>
+        </div>
+
+        <h3>All URL Parameters:</h3>
+        <table class="param-table" id="params-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody id="params-body">
+                <tr>
+                    <td colspan="2">No parameters received</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 30px;">
+            <h3>Common Error Codes:</h3>
+            <ul>
+                <li><code>INVALID_CREDENTIALS</code> - Wrong username or password</li>
+                <li><code>ACCOUNT_DISABLED</code> - User account has been disabled</li>
+                <li><code>ACCOUNT_NOT_VERIFIED</code> - Email verification required</li>
+                <li><code>TOO_MANY_ATTEMPTS</code> - Too many failed login attempts</li>
+                <li><code>SESSION_EXPIRED</code> - Login session has expired</li>
+                <li><code>ACCESS_DENIED</code> - Access to resource denied</li>
+                <li><code>GENERIC_ERROR</code> - Unknown or unmapped error</li>
+            </ul>
+        </div>
+
+        <a href="javascript:history.back()" class="back-button">← Go Back</a>
+    </div>
+
+    <script>
+        // Parse URL parameters and display them
+        function parseAndDisplayParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paramsBody = document.getElementById('params-body');
+            
+            if (urlParams.size === 0) {
+                paramsBody.innerHTML = '<tr><td colspan="2">No parameters received</td></tr>';
+                return;
+            }
+
+            let tableRows = '';
+            for (const [key, value] of urlParams) {
+                tableRows += `<tr><td>${escapeHtml(key)}</td><td>${escapeHtml(value)}</td></tr>`;
+                
+                // Update specific error details
+                switch(key) {
+                    case 'error_code':
+                        document.getElementById('error-code').textContent = value;
+                        break;
+                    case 'error_message':
+                        document.getElementById('error-message').textContent = value;
+                        break;
+                    case 'timestamp':
+                        document.getElementById('timestamp').textContent = new Date(value).toLocaleString();
+                        break;
+                    case 'source':
+                        document.getElementById('source').textContent = value;
+                        break;
+                }
+            }
+            
+            paramsBody.innerHTML = tableRows;
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', parseAndDisplayParams);
+    </script>
+</body>
+</html>

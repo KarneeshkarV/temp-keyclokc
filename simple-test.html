@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Error Redirect Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .url { background: #f0f0f0; padding: 10px; margin: 10px 0; word-break: break-all; }
+        .button { display: inline-block; background: #007bff; color: white; padding: 10px 15px; text-decoration: none; margin: 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Quick Test</h1>
+    
+    <h2>Step 1: Go to Keycloak Login</h2>
+    <a href="http://localhost:8080/realms/master/account" class="button">Open Keycloak Login</a>
+    
+    <h2>Step 2: Test with Direct URLs</h2>
+    <p>Copy these URLs into your browser address bar:</p>
+    
+    <div class="url">http://localhost:8080/realms/master/account?error=cancelledOnApp</div>
+    <div class="url">http://localhost:8080/realms/master/account?error=access_denied</div>
+    
+    <h2>Step 3: Test with Wrong Login</h2>
+    <ol>
+        <li>Go to: <a href="http://localhost:8080/realms/master/account">http://localhost:8080/realms/master/account</a></li>
+        <li>Enter wrong username: <code>wronguser</code></li>
+        <li>Enter wrong password: <code>wrongpass</code></li>
+        <li>Click Login</li>
+        <li>Should redirect to your error page!</li>
+    </ol>
+
+    <h2>Debug Info</h2>
+    <p>Open browser console (F12) and look for <code>[ErrorRedirect]</code> messages.</p>
+    
+    <p>Expected redirect: <code>https://app.valura.co.in/auth?error_code=...</code></p>
+</body>
+</html>
