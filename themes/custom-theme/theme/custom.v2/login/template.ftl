@@ -227,6 +227,25 @@
     Alpine.start();
 </script>
 <#-- Initialize Error Redirect Handler -->
+<script type="text/javascript">
+    console.log('🎯 Template script loaded');
+    console.log('Error redirect enabled:', '${properties['errorRedirect.enabled']!'false'}');
+    console.log('Error redirect URL:', '${properties['errorRedirect.url']!''}');
+    console.log('Current URL:', window.location.href);
+    
+    // Simple immediate check
+    const templateUrlParams = new URLSearchParams(window.location.search);
+    const errorParam = templateUrlParams.get('error');
+    console.log('Error parameter from template:', errorParam);
+    
+    // Check both URL parameter and URL content
+    if (errorParam === 'cancelledOnApp' || window.location.href.includes('cancelledOnApp')) {
+        console.log('🚨 CANCELLED ON APP DETECTED - REDIRECTING!');
+        setTimeout(() => {
+            window.location.href = 'https://app.valura.co.in/auth?error_code=CANCELLED_ON_APP&source=template_direct';
+        }, 100);
+    }
+</script>
 <#if properties['errorRedirect.enabled']?has_content && properties['errorRedirect.enabled'] == 'true'>
 <script type="text/javascript">
     // Initialize error redirect handler if configuration is available

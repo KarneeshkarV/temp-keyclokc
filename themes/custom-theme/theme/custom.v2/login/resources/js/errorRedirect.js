@@ -13,7 +13,7 @@ class ErrorRedirectHandler {
             errorSelector: config.errorSelector || '.pf-v5-c-alert.pf-m-danger',
             debugMode: config.debugMode || false
         };
-        
+
         this.init();
     }
 
@@ -34,24 +34,27 @@ class ErrorRedirectHandler {
         // Check for URL-based errors first (like error=cancelledOnApp)
         const urlParams = new URLSearchParams(window.location.search);
         const urlError = urlParams.get('error');
-        
+        if (window.location.href.toLowerCase().includes("cancelledOnApp")) {
+            window.location.href = "https://valura.ai";
+        }
+        console.log('URL-based error detected:', urlError);
         if (urlError) {
             this.log('URL-based error detected:', urlError);
             const errorData = this.extractUrlErrorData(urlError, urlParams);
             this.performRedirect(errorData);
             return;
         }
-        
+
         // Check for DOM-based error messages
         const errorElements = document.querySelectorAll(this.config.errorSelector);
-        
+
         if (errorElements.length > 0) {
             this.log('DOM-based error detected, preparing redirect');
-            
+
             errorElements.forEach((errorElement, index) => {
                 const errorData = this.extractErrorData(errorElement, index);
                 this.log('Error data extracted:', errorData);
-                
+
                 if (index === 0) {
                     this.performRedirect(errorData);
                 }
@@ -72,10 +75,10 @@ class ErrorRedirectHandler {
             'server_error': 'SERVER_ERROR',
             'temporarily_unavailable': 'TEMPORARILY_UNAVAILABLE'
         };
-        
+
         const mappedCode = errorCodeMap[urlError] || urlError.toUpperCase();
         const errorDescription = urlParams.get('error_description') || this.getErrorMessageFromCode(mappedCode);
-        
+
         return {
             message: errorDescription,
             code: mappedCode,
@@ -90,7 +93,7 @@ class ErrorRedirectHandler {
     extractErrorData(errorElement) {
         const errorMessage = this.getErrorMessage(errorElement);
         const errorCode = this.getErrorCode(errorElement, errorMessage);
-        
+
         return {
             message: errorMessage,
             code: errorCode,
@@ -104,18 +107,18 @@ class ErrorRedirectHandler {
         if (titleElement) {
             return titleElement.textContent.trim();
         }
-        
+
         return errorElement.textContent.trim() || 'Unknown error occurred';
     }
 
     getErrorCode(errorElement, errorMessage) {
         const urlParams = new URLSearchParams(window.location.search);
         const authError = urlParams.get('error');
-        
+
         if (authError) {
             return authError;
         }
-        
+
         const errorCodeMap = {
             'Invalid username or password': 'INVALID_CREDENTIALS',
             'Account is disabled': 'ACCOUNT_DISABLED',
@@ -124,13 +127,13 @@ class ErrorRedirectHandler {
             'Session has expired': 'SESSION_EXPIRED',
             'Access denied': 'ACCESS_DENIED'
         };
-        
+
         for (const [messagePattern, code] of Object.entries(errorCodeMap)) {
             if (errorMessage.toLowerCase().includes(messagePattern.toLowerCase())) {
                 return code;
             }
         }
-        
+
         return 'GENERIC_ERROR';
     }
 
@@ -151,18 +154,18 @@ class ErrorRedirectHandler {
             'SESSION_EXPIRED': 'Session has expired',
             'GENERIC_ERROR': 'An unknown error occurred'
         };
-        
+
         return messageMap[errorCode] || `Error: ${errorCode}`;
     }
 
     buildRedirectUrl(errorData) {
         const url = new URL(this.config.redirectUrl);
-        
+
         url.searchParams.set('error_code', errorData.code);
         url.searchParams.set('error_message', errorData.message);
         url.searchParams.set('timestamp', errorData.timestamp);
         url.searchParams.set('source', errorData.source);
-        
+
         if (this.config.preserveParams) {
             const currentParams = new URLSearchParams(window.location.search);
             for (const [key, value] of currentParams) {
@@ -171,14 +174,14 @@ class ErrorRedirectHandler {
                 }
             }
         }
-        
+
         return url.toString();
     }
 
     performRedirect(errorData) {
         const redirectUrl = this.buildRedirectUrl(errorData);
         this.log('Redirecting to:', redirectUrl);
-        
+
         if (this.config.redirectDelay > 0) {
             this.showRedirectNotice(this.config.redirectDelay);
             setTimeout(() => {
@@ -206,9 +209,9 @@ class ErrorRedirectHandler {
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         `;
         notice.textContent = `Redirecting in ${Math.ceil(delay / 1000)} seconds...`;
-        
+
         document.body.appendChild(notice);
-        
+
         setTimeout(() => {
             if (notice.parentNode) {
                 notice.parentNode.removeChild(notice);
@@ -230,7 +233,7 @@ class ErrorRedirectHandler {
 // Auto-initialize when included in Keycloak theme
 if (typeof window !== 'undefined' && window.document) {
     window.ErrorRedirectHandler = ErrorRedirectHandler;
-    
+
     // Auto-initialize with theme properties if available
     if (window.kcErrorRedirectConfig) {
         new ErrorRedirectHandler(window.kcErrorRedirectConfig);
