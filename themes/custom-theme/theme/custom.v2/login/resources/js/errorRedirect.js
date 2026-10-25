@@ -34,7 +34,7 @@ class ErrorRedirectHandler {
         // Check for URL-based errors first (like error=cancelledOnApp)
         const urlParams = new URLSearchParams(window.location.search);
         const urlError = urlParams.get('error');
-        if (window.location.href.toLowerCase().includes("cancelledOnApp")) {
+        if (window.location.href.toLowerCase().includes("cancelled")) {
             window.location.href = "https://valura.ai";
         }
         console.log('URL-based error detected:', urlError);
